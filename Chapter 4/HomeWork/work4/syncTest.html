@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalStorage Sync Example</title>
+    <script>
+        function updateLocalStorage(key, value) {
+            localStorage.setItem(key, value);
+            document.getElementById('syncedData').textContent = value;
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        function getFromLocalStorage(key) {
+            return localStorage.getItem(key);
+        }
+
+        function handleStorageEvent(event) {
+            if (event.key === 'syncKey') {
+                document.getElementById('syncedData').textContent = getFromLocalStorage('syncKey');
+            }
+        }
+
+        window.addEventListener('storage', handleStorageEvent);
+
+        function updateSyncedData() {
+            const newValue = document.getElementById('syncInput').value;
+            updateLocalStorage('syncKey', newValue);
+        }
+
+        window.onload = function() {
+            const storedValue = getFromLocalStorage('syncKey');
+            if (storedValue) {
+                document.getElementById('syncedData').textContent = storedValue;
+            }
+        };
+    </script>
+</head>
+<body>
+<h1>LocalStorage Sync Example</h1>
+<input type="text" id="syncInput" placeholder="Enter data to sync">
+<button onclick="updateSyncedData()">Sync Data</button>
+<p>Synced Data: <span id="syncedData"></span></p>
+</body>
+</html>

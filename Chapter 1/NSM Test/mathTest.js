@@ -1,0 +1,18 @@
+let [a, b, c, d] = [5, 10.10352, -21.12631, 200.8156]
+//let [a, b, c, d] = [Number([' ']), 10.10352, -21.12631, 200.8156]
+console.log(Math.E)
+console.log(Math.LN2)
+console.log(Math.LN10)
+console.log(Math.LOG2E)
+console.log(Math.LOG10E)
+console.log(Math.PI)
+console.log(Math.SQRT1_2)
+console.log(Math.SQRT2)
+console.log(Math.min(a, b))
+console.log(Math.max(a, b))
+console.log(Math.floor(b))
+console.log(Math.ceil(b))
+console.log(Math.round(1.4))
+console.log(Math.trunc(d))
+console.log(Math.abs(c))
+console.log(Math.random() * 10)

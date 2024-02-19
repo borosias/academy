@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Iframe</title>
+    <script>
+        let messageCount = 0;
+        window.parent.postMessage('Hello from Iframe!', 'http://localhost:63342');
+
+        window.addEventListener('message', function(event) {
+            if (event.origin !== 'http://localhost:63342') {
+                return;
+            }
+            messageCount++;
+            setTimeout(function() {
+                document.getElementById('iframeResult').textContent = 'Received message from Parent: ' + event.data + '; Total messages:' + messageCount;
+                console.log('Received message from Parent:', event.data,'Total messages:', messageCount);
+            }, 1000);
+
+        });
+    </script>
+</head>
+<body>
+
+<h1>Iframe Content</h1>
+<p id="iframeResult">Iframe Result:</p>
+</body>
+</html>

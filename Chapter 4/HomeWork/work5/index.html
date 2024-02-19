@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Search</title>
+</head>
+<body>
+<div class="container">
+    <label for="searchInput"></label>
+    <input type="text" id="searchInput" placeholder="Search YouTube videos...">
+    <div id="searchResults"></div>
+</div>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let timeoutId = null;
+    let controller = null;
+
+    searchInput.addEventListener('input', (event) => {
+        const query = event.target.value.trim();
+        if (query.length < 3) return;
+
+        if (controller) {
+            controller.abort();
+        }
+
+        controller = new AbortController();
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        timeoutId = setTimeout(() => {
+            searchYoutube(query, controller);
+        }, 500);
+    });
+
+    async function searchYoutube(query, controller) {
+        const url = `https://youtube-search6.p.rapidapi.com/search/?query=${query}&number=20&country=us&lang=en`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': '8b865acc29msh61ced99f4768293p1e9d51jsn52803246bce0',
+                'X-RapidAPI-Host': 'youtube-search6.p.rapidapi.com'
+            },
+            signal: controller.signal
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            displayResults(result.videos);
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('Previous request was aborted');
+            } else {
+                console.error(error);
+            }
+        }
+    }
+
+    function displayResults(videos) {
+        searchResults.innerHTML = '';
+
+        if (videos && videos.length > 0) {
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.classList.add('video-item');
+                videoItem.innerHTML = `
+                    <h2>${video.title}</h2>
+                    <img src="${video.thumbnails[0].url}" alt="${video.title}">
+                    <p>${video.description}</p>
+                `;
+                searchResults.appendChild(videoItem);
+            });
+        } else {
+            const noResults = document.createElement('div');
+            noResults.classList.add('no-results');
+            noResults.textContent = 'No results found.';
+            searchResults.appendChild(noResults);
+        }
+    }
+</script>
+</body>
+</html>
+
+
+

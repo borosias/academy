@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parent Window</title>
+    <script>
+        let messageCount = 0;
+        // Обробник повідомлень від Iframe
+        window.addEventListener('message', function(event) {
+            if (event.origin !== 'http://localhost:63342') {
+                // Перевірка джерела повідомлення
+                return;
+            }
+
+            messageCount++;
+            setTimeout(() => {
+                console.log('Received message from Iframe:', event.data, 'Total messages:', messageCount);
+                document.getElementById('parentResult').textContent = 'Received message from Iframe: ' + event.data + '; Total messages:' + messageCount;
+                event.source.postMessage('Hello from Parent!', event.origin);
+            }, 1000);
+        });
+    </script>
+
+</head>
+<body>
+
+<iframe src="iframe.html" width="600" height="400"></iframe>
+<p id="parentResult">Parent Result:</p>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<h1>Index 2</h1>
+<button onclick="sendMessage()">Send message</button>
+
+<script>
+    let channel = new BroadcastChannel('my_channel');
+
+    function sendMessage() {
+        let message = 'Hello from index2';
+        channel.postMessage(message);
+        console.log('Message sent: ' + message);
+    }
+
+    channel.onmessage = function(event) {
+        console.log('Message received: ' + event.data);
+    };
+</script>
+</body>
+</html>
